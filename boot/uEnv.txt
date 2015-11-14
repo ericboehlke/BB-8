@@ -1,0 +1,28 @@
+#Docs: http://elinux.org/Beagleboard:U-boot_partitioning_layout_2.0
+
+uname_r=3.8.13-bone74
+#dtb=
+cmdline=quiet init=/lib/systemd/systemd 
+
+##Example
+#cape_disable=capemgr.disable_partno=bone_pwm_P8_13
+cape_enable=capemgr.enable_partno=am33xx_pwm,bone_pwm_P8_13,bone_pwm_P8_19,bone_pwm_P9_16,bone_pwm_P9_22,bone_pwm_P9_28,bone_pwm_P9_42
+
+#Disable HDMI/eMMC
+cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN,BB-BONE-EMMC-2G
+
+#Disable HDMI
+cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN
+
+##Disable eMMC
+#cape_disable=capemgr.disable_partno=BB-BONE-EMMC-2G
+
+##Audio Cape (needs HDMI Audio disabled)
+#cape_disable=capemgr.disable_partno=BB-BONELT-HDMI
+#cape_enable=capemgr.enable_partno=BB-BONE-AUDI-02
+
+
+##enable BBB: eMMC Flasher:
+#cmdline=init=/opt/scripts/tools/eMMC/init-eMMC-flasher-v3.sh
+
+uuid=81e5134c-c4aa-49f9-ac7a-5004e733ed34
