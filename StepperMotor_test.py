@@ -2,19 +2,17 @@ import Adafruit_BBIO.GPIO as GPIO
 import time
 from StepperMotor import * 
 
-steppingMode = SteppingMode("P8_10", "P8_11", "P8_12")
+steppingMode = SteppingMode("P9_23", "P9_25", "P9_27")
 
-motorBlue = StepperMotor("P8_13", "P8_14")
-motorGreen = StepperMotor("P9_16", "P8_12")
-motorYellow = StepperMotor("P9_28", "P8_10")
+motorBlue = StepperMotor("P9_22", "P9_24")
+motorGreen = StepperMotor("P9_16", "P9_15")
+motorYellow = StepperMotor("P9_28", "P9_30")
 
-steppingMode.setMode(0)
+steppingMode.setMode(5)
 
-time.sleep(2)
-
-motorBlue.forward(5)
-motorGreen.forward(5)
-motorYellow.forward(5)
+motorBlue.forward(3)
+motorGreen.forward(10)
+motorYellow.forward(20)
 
 time.sleep(10)
 
