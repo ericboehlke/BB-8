@@ -38,15 +38,17 @@ class SteppingMode:
 class StepperMotor(object):
     
     def __init__ (self, stepPin, directionPin):
-        GPIO.setup(directionPin, GPIO.OUT)
         self.stepPin = stepPin
         self.directionPin = directionPin
+        PWM.start(self.stepPin, 0)
+        GPIO.setup(self.directionPin, GPIO.OUT)
 
     def setSpeed(self, rpm):
         if rpm != 0:
-            PWM.start(self.stepPin, 50, SteppingMode.getFrequency(rpm), 1)
+            PWM.set_frequency(self.stepPin, SteppingMode.getFrequency(rpm))
+            PWM.set_duty_cycle(self.stepPin, 50)
         else:
-            PWM.stop(self.stepPin)
+            PWM.set_duty_cycle(self.stepPin, 0)
 
     def forward(self, rpm):
         GPIO.output(self.directionPin, GPIO.HIGH)
@@ -57,4 +59,4 @@ class StepperMotor(object):
         self.setSpeed(rpm)
 
     def stop(self):
-        PWM.stop(self.stepPin)
+        PWM.set_duty_cycle(self.stepPin, 0)
