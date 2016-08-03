@@ -3,8 +3,8 @@ import math
 
 class Omniwheel(object):
     
-    def __init__ (self, pin1, pin2, pwmA, pin3, pin4, pwmB, steppingMode, wheelAngle):
-        self.motor = StepperMotor(pin1, pin2, pwmA, pin3, pin4, pwmB, steppingMode)
+    def __init__ (self, stepPin, directionPin, wheelAngle):
+        self.motor = StepperMotor(stepPin, directionPin)
         self.wheelAngle = wheelAngle
     
     def calculateVelocity (self, drivingAngle, drivingSpeed): 
@@ -20,9 +20,11 @@ class Omniwheel(object):
 class Omnibot(object):
     
     def __init__ (self):
-        self.blueWheel = Omniwheel("P9_24", "P9_26", "P9_42", "P9_30", "P9_41", "P9_28", StepperMotor.MICRO_STEP, math.radians(0))
-        self.yellowWheel = Omniwheel("P9_21", "P9_23", "P9_16", "P9_25", "P9_27", "P9_22", StepperMotor.MICRO_STEP, math.radians(120))
-        self.greenWheel = Omniwheel("P8_8", "P8_10", "P8_19", "P8_12", "P8_14", "P8_13", StepperMotor.MICRO_STEP, math.radians(240))
+        self.blueWheel = Omniwheel("P9_22", "P9_24", math.radians(0))
+        self.yellowWheel = Omniwheel("P9_28", "P9_30", math.radians(120))
+        self.greenWheel = Omniwheel("P9_16", "P9_15", math.radians(240))
+        self.steppingMode = SteppingMode("P9_23", "P9_25", "P9_27")
+        self.steppingMode.setMode(5)
 
     def move (self, angle, speed):
         self.blueWheel.calculateVelocity(angle, speed)

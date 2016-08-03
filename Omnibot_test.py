@@ -5,7 +5,8 @@ from Omnibot import *
 zeroAngle = math.radians(103)
 
 twitch = Omnibot()
-twitch.move(0, 2)
+twitch.move(90, 20)
 
-while True:
-    time.sleep(.1)
+time.sleep(5)
+
+twitch.stop()

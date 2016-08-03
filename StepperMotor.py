@@ -41,13 +41,12 @@ class StepperMotor(object):
         GPIO.setup(directionPin, GPIO.OUT)
         self.stepPin = stepPin
         self.directionPin = directionPin
-        
+
     def setSpeed(self, rpm):
         if rpm != 0:
             PWM.start(self.stepPin, 50, SteppingMode.getFrequency(rpm), 1)
         else:
             PWM.stop(self.stepPin)
-        print SteppingMode.getFrequency(rpm)
 
     def forward(self, rpm):
         GPIO.output(self.directionPin, GPIO.HIGH)
