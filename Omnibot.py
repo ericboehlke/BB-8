@@ -26,7 +26,7 @@ class Omnibot(object):
     
     def __init__ (self):
         self.blueWheel = Omniwheel("P9_22", "P9_24", math.radians(0))
-        self.yellowWheel = Omniwheel("P8_13", "P8_14", math.radians(120))
+        self.yellowWheel = Omniwheel("P9_42", "P9_41", math.radians(120))
         self.greenWheel = Omniwheel("P9_16", "P9_15", math.radians(240))
         self.steppingMode = SteppingMode("P9_23", "P9_25", "P9_27")
         self.steppingMode.setMode(5)

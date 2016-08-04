@@ -5,10 +5,13 @@ from Omnibot import *
 zeroAngle = math.radians(103)
 
 twitch = Omnibot()
-# twitch.move(-30, 40)
-twitch.spin(10)
+twitch.move(-30, 40)
 
-time.sleep(10)
+time.sleep(.25)
+
+twitch.spin(40)
+
+time.sleep(.5)
 
 twitch.spin(0)
 
