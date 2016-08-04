@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang=en>
+    <head>
+        <meta charset=utf-8>
+        <meta name="viewport" content="width=device-width; height=device-height; initial-scale=1.0; maximum-scale=1.0;" />
+        <title></title>
+        <style type="text/css">
+            *
+            {
+                -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
+                -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
+                /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+                -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
+                -webkit-tap-highlight-color: rgba(0,0,0,0);
+            }
+
+            body
+            {
+                background-color: #000000;
+                margin: 0px;
+            }
+
+            canvas
+            {
+                display:block;
+                position:absolute;
+            }
+
+            .container
+            {
+                width:auto;
+                text-align:center;
+                background-color:#000000;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <center><img src="images/extraSENSORy.png"/></center>
+            <canvas id="canvas"></canvas>
+        </div>
+
+		<script src="js/mchp.js" type="text/javascript"></script>
+        <script src="js/Vector2.js" type="text/javascript"></script>
+        <script type="text/javascript">
+
+            var canvas;
+            var context2d;
+            var	halfWidth;
+            var	halfHeight;
+            var	leftTouchID = -1;
+            var	leftTouchPos = new Vector2(0,0);
+            var	leftTouchStartPos = new Vector2(0,0);
+            var	leftVector = new Vector2(0,0);
+            var	rightTouchID = -1;
+            var	rightTouchPos = new Vector2(0,0);
+            var	rightTouchStartPos = new Vector2(0,0);
+            var	rightVector = new Vector2(0,0);
+            // is this running in a touch capable environment?
+            var touchable = 'createTouch' in document;
+            // array of touch vectors
+            var touches = [];
+
+            setupCanvas();
+            setInterval(draw, 1000/35);
+
+            if (touchable)
+            {
+                canvas.addEventListener( 'touchstart', onTouchStart, false );
+                canvas.addEventListener( 'touchmove', onTouchMove, false );
+                canvas.addEventListener( 'touchend', onTouchEnd, false );
+                window.onorientationchange = resetCanvas;
+                window.onresize = resetCanvas;
+            }
+
+            function draw()
+            {
+                context2d.clearRect(0,0,canvas.width, canvas.height);
+
+                if (touchable)
+                {
+                    for(var i=0; i<touches.length; i++)
+                    {
+                        var touch = touches[i];
+
+                        if (touch.identifier == leftTouchID)
+                        {
+                            context2d.beginPath();
+                            context2d.strokeStyle = "blue";
+                            context2d.lineWidth = 8;
+                            context2d.arc(leftTouchStartPos.x, leftTouchStartPos.y, 40,0,Math.PI*2,true);
+                            context2d.stroke();
+
+                            context2d.beginPath();
+                            context2d.strokeStyle = "blue";
+                            context2d.lineWidth = 2;
+                            context2d.arc(leftTouchStartPos.x, leftTouchStartPos.y, 60,0,Math.PI*2,true);
+                            context2d.stroke();
+
+                            context2d.beginPath();
+                            context2d.strokeStyle = "yellow";
+                            context2d.arc(leftTouchPos.x, leftTouchPos.y, 40, 0,Math.PI*2, true);
+                            context2d.stroke();
+                            //context2d.fillStyle = "rgba(0, 0, 200, 0.75)";
+                            //context2d.fill();
+                       }
+                        else if (touch.identifier == rightTouchID)
+                        {
+							context2d.beginPath();
+							context2d.strokeStyle = "blue";
+							context2d.lineWidth = 7;
+							context2d.arc(rightTouchStartPos.x, rightTouchStartPos.y, 30,0,Math.PI*2,true);
+							context2d.stroke();
+
+							context2d.beginPath();
+							context2d.strokeStyle = "blue";
+							context2d.lineWidth = 2;
+							context2d.arc(rightTouchStartPos.x, rightTouchStartPos.y, 45,0,Math.PI*2,true);
+							context2d.stroke();
+
+							context2d.beginPath();
+							context2d.strokeStyle = "orange";
+							context2d.arc(rightTouchPos.x, rightTouchPos.y, 30, 0,Math.PI*2, true);
+							context2d.stroke();
+							//context2d.fillStyle = "rgba(0, 0, 200, 0.75)";
+							//context2d.fill();
+						}
+						else
+						{
+                            context2d.beginPath();
+                            context2d.fillStyle = "white";
+                            context2d.fillText("touch id : "+touch.identifier+" x:"+touch.clientX+" y:"+touch.clientY, touch.clientX+50, touch.clientY-117-50);
+
+                            context2d.beginPath();
+                            context2d.strokeStyle = "yellow";
+                            context2d.lineWidth = "6";
+                            context2d.arc(touch.clientX, touch.clientY-117, 40, 0, Math.PI*2, true);
+                            context2d.stroke();
+                        }
+                    }
+                }
+            }
+
+            /*
+             *	Touch event (e) properties :
+             *	e.touches: 			Array of touch objects for every finger currently touching the screen
+             *	e.targetTouches: 	Array of touch objects for every finger touching the screen that
+             *						originally touched down on the DOM object the transmitted the event.
+             *	e.changedTouches	Array of touch objects for touches that are changed for this event.
+             *						I am not sure if this would ever be a list of more than one, but would
+             *						be bad to assume.
+             *
+             *	Touch objects :
+             *
+             *	identifier: An identifying number, unique to each touch event
+             *	target: DOM object that broadcast the event
+             *	clientX: X coordinate of touch relative to the viewport (excludes scroll offset)
+             *	clientY: Y coordinate of touch relative to the viewport (excludes scroll offset)
+             *	screenX: Relative to the screen
+             *	screenY: Relative to the screen
+             *	pageX: Relative to the full page (includes scrolling)
+             *	pageY: Relative to the full page (includes scrolling)
+             */
+
+            function onTouchStart(event)
+            {
+                var touchCount = event.changedTouches.length;
+                for(var i = 0; i < touchCount; i++)
+                {
+                    var touch=event.changedTouches[i];
+                    if (touch.clientX<halfWidth)
+                    {
+						if (leftTouchID<0)
+						{
+							leftTouchID = touch.identifier;
+							leftTouchStartPos.reset(touch.clientX, touch.clientY - 117);
+							leftTouchPos.copyFrom(leftTouchStartPos);
+							leftVector.reset(0,0);
+						}
+                    }
+                    else
+                    {
+						if (rightTouchID<0)
+						{
+							rightTouchID = touch.identifier;
+							rightTouchStartPos.reset(touch.clientX, touch.clientY - 117);
+							rightTouchPos.copyFrom(rightTouchStartPos);
+							rightVector.reset(0,0);
+						}
+                    }
+                }
+                touches = event.touches;
+            }
+
+            function onTouchMove(event)
+            {
+                 // Prevent the browser from doing its default thing (scroll, zoom)
+                event.preventDefault();
+
+                var touchCount = event.changedTouches.length;
+                for(var i = 0; i<touchCount; i++)
+                {
+                    var touch =event.changedTouches[i];
+                    if(leftTouchID == touch.identifier)
+                    {
+                        leftTouchPos.reset(touch.clientX, touch.clientY - 117);
+                        leftVector.copyFrom(leftTouchPos);
+                        leftVector.minusEq(leftTouchStartPos);
+                    }
+                    else if (rightTouchID == touch.identifier)
+                    {
+                        rightTouchPos.reset(touch.clientX, touch.clientY - 117);
+                        rightVector.copyFrom(rightTouchPos);
+                        rightVector.minusEq(rightTouchStartPos);
+                    }
+                }
+                touches = event.touches;
+            }
+
+            function onTouchEnd(event)
+            {
+                touches = event.touches;
+
+                for (var i = 0; i<event.changedTouches.length; i++)
+                {
+                    var touch = event.changedTouches[i];
+                    if(leftTouchID == touch.identifier)
+                    {
+                        leftVector.reset(0,0);
+                        sendValues();
+                        leftTouchID = -1;
+                    }
+                    else if (rightTouchID == touch.identifier)
+                    {
+                        rightVector.reset(0,0);
+                        sendValues();
+                        rightTouchID = -1;
+                    }
+                }
+            }
+
+            function setupCanvas()
+            {
+                canvas = document.getElementById('canvas');
+                context2d = canvas.getContext('2d');
+                resetCanvas();
+            }
+
+            function resetCanvas (e)
+            {
+                // resize the canvas - but remember - this clears the canvas too.
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight - 117;
+
+                halfWidth = canvas.width/2;
+                halfHeight = canvas.height/2;
+
+                // make sure we scroll to the top left.
+                window.scrollTo(0,0);
+            }
+
+			var compassAngle = 0;
+			window.addEventListener('deviceorientation', function(e)
+			{
+				compassAngle = e.webkitCompassHeading;
+			}, false);
+
+            var sendValuesTimeout = undefined;
+            function sendValues()
+            {
+                if (leftTouchID != -1)
+                {
+					var speed = Math.round(leftVector.magnitude() / 2);
+                    if (speed > 100) { speed = 100; }
+
+
+					var direction = leftVector.angle(false);
+                    //direction = Math.round(direction / 2);
+
+					// rotate angle so up is zero
+                    // direction += 45;
+                    // if (direction > 90 && direction < 135) {direction = direction - 180;}
+
+					// add compass angle
+					//direction += compassAngle;
+
+                    // console.log('speed: ' + speed + ' direction: ' + direction + ' compassAngle: ' + compassAngle);
+
+
+					// convert to signed byte
+                    // if (direction < 0) { direction = Math.abs(direction) + 128; }
+
+	                newAJAXCommand('move?speed=' + speed + '&direction=' + direction);
+                }
+                if (rightTouchID != -1)
+                {
+					var speed = Math.round(rightVector.magnitude() / 2);
+                    if (speed > 100) { speed = 100; }
+
+
+					var direction = rightVector.angle(false);
+                    //direction = Math.round(direction / 2);
+
+					// rotate angle so up is zero
+                    
+                    //if (direction > 90 && direction < 135) {direction = direction - 180;}
+                    direction += 180;
+                    //direction = direction * 2;
+
+
+                    // console.log(speed + '   ' + direction);
+
+					// convert to signed byte
+                    // if (direction < 0) { direction = Math.abs(direction) + 128; }
+
+	                newAJAXCommand('move?speed=' + speed + '&direction=' + direction);
+                }
+                clearTimeout(sendValuesTimeout);
+                sendValuesTimeout = setTimeout(function() { sendValues(); }, 500);
+            }
+            sendValues();
+
+        </script>
+    </body>
+</html>
