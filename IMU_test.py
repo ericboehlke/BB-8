@@ -7,7 +7,7 @@ from PID import *
 
 imu = IMU(1)
 
-zeroAngle = math.radians(103)
+zeroAngle = math.radians(180)
 twitch = Omnibot()
 
 def getDriveAngle (x, y, zeroAngle):

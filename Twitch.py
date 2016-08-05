@@ -42,7 +42,7 @@ twitch.yellowWheel.rotate(0)
 
 sleep(5)
 
-zeroAngle = math.radians(103)
+zeroAngle = math.radians(180)
 
 def getDriveAngle (x, y, zeroAngle):
 	fallingAngle = math.atan2(x, y)
