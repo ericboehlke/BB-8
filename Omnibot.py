@@ -11,8 +11,8 @@ class Omniwheel(object):
         w = self.wheelAngle
         d = drivingAngle
         wheelSpeed = drivingSpeed * (math.cos(w) * math.cos(d) + math.sin(w) * math.sin(d))
-        if wheelSpeed < 0:
-            self.motor.forward(abs(wheelSpeed))
+        if wheelSpeed > 0:
+            self.motor.forward(wheelSpeed)
         else:
             self.motor.reverse(abs(wheelSpeed))
             

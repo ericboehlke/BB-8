@@ -15,11 +15,12 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)
 
-target = Orientation(5, 0, 0)
+target = Orientation(0, 0, 0)
 
 @app.route('/tilt')
 def tilt ():
     pitch = float(request.args.get('pitch'))
+    print "pitch:", pitch
     if pitch > 0:
         pitch = min(pitch, 10)
     else:
@@ -27,6 +28,7 @@ def tilt ():
     target.pitch = pitch
     
     roll = float(request.args.get('roll'))
+    print "roll:", roll
     if roll > 0:
         roll = min(roll, 10)
     else:
