@@ -272,11 +272,10 @@
             {
                 if (leftTouchID != -1)
                 {
-					var speed = Math.round(leftVector.magnitude() / 2);
-                    if (speed > 100) { speed = 100; }
+					//var speed = Math.round(leftVector.magnitude() / 2);
+                    //if (speed > 100) { speed = 100; }
 
-
-					var direction = leftVector.angle(false);
+					//var direction = leftVector.angle(false);
                     //direction = Math.round(direction / 2);
 
 					// rotate angle so up is zero
@@ -292,7 +291,7 @@
 					// convert to signed byte
                     // if (direction < 0) { direction = Math.abs(direction) + 128; }
 
-	                newAJAXCommand('move?speed=' + speed + '&direction=' + direction);
+	                newAJAXCommand('http://snoopy.local:5000/tilt?pitch=' + leftVector.x + '&roll=' + leftVector.y);
                 }
                 if (rightTouchID != -1)
                 {

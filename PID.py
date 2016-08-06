@@ -1,8 +1,10 @@
 class PIDController(object):
   
-  Kp = .6 
-  Ki = .2                       
-  Kd = 1
+  Kcrit = 6.5
+  # Pu = 2
+  Kp = Kcrit / 1.7 #6   
+  Ki =  0#1 #  0 # 1                       
+  Kd = .25 # .25 # .25 #.3
   K = .5
   GUARD_GAIN = 10
 

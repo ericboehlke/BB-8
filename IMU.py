@@ -8,9 +8,9 @@ from KalmanFilter import *
 class IMU(object):
         
     DELAY_TIME = .02
-    GYRO_NOISE = .001
-    BIAS_NOISE = .003
-    ACCEL_NOISE = .01
+    GYRO_NOISE = .001/2
+    BIAS_NOISE = .003/2
+    ACCEL_NOISE = .01/2
 
     def __init__(self, i2cBus = 1):
         self.gyro = Gyroscope(i2cBus, Gyroscope.DPS2000)
@@ -53,10 +53,12 @@ class IMU(object):
             # # low pass filter
             #self.roll = self.roll*.5 + accelOrientation.roll*.5
             #self.pitch = self.pitch*.5 + accelOrientation.pitch*.5
+            #print (time.time() - startTime)
             time.sleep(max(0, IMU.DELAY_TIME - (time.time() - startTime)))
             self.elapsedTime = time.time() - startTime
 
     def getOrientation(self):
+        #print self.roll, self.pitch, self.yaw
         return Orientation(self.roll, self.pitch, self.yaw)
         
 class Orientation(object):
@@ -108,8 +110,8 @@ class Accelerometer(object):
     SCALE_M_56G = 0b11000000	# +/- 5.6 Gauss scale
     SCALE_M_81G = 0b11100000	# +/- 8.1 Gauss scale
 
-    ZERO_X = -73
-    ZERO_Y = 37
+    ZERO_X = 0
+    ZERO_Y = 5
     ZERO_Z = -63
     #73.312 -36.512 4102.48
 
@@ -195,9 +197,9 @@ class Gyroscope(object):
     ZOUTLOW = 0x2C
     ZOUTHIGH = 0x2D
     
-    ZERO_X = -35
-    ZERO_Y = 142
-    ZERO_Z = -67
+    ZERO_X = -32
+    ZERO_Y = 139
+    ZERO_Z = -32
     #35.17 -142.38 52.83
 
     def __init__ (self, i2cBus, dps):
