@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html> 
 <html lang=en>
     <head>
         <meta charset=utf-8>
@@ -291,7 +291,7 @@
 					// convert to signed byte
                     // if (direction < 0) { direction = Math.abs(direction) + 128; }
 
-	                newAJAXCommand('http://snoopy.local:5000/tilt?pitch=' + leftVector.x + '&roll=' + leftVector.y);
+	                newAJAXCommand('http://snoopy.local:5000/tilt?pitch=' + leftVector.x/10 + '&roll=' + leftVector.y/10);
                 }
                 if (rightTouchID != -1)
                 {
